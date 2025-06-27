@@ -1,0 +1,25 @@
+# Ignore uploaded files
+uploads/
+images/
+sample/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment files
+.env
+venv/
+.env.local
+
+# Ignore model checkpoints or temp files
+*.h5
+*.pkl
+*.log
+
+# VS Code config
+.vscode/
