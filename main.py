@@ -10,20 +10,31 @@ import pickle
 from sklearn.neighbors import NearestNeighbors
 from io import BytesIO
 
-# --- Page Title ---st.title("Fashion Recommendation System 👗🧥")
+import streamlit as st
+import pickle
+import requests
+import numpy as np
 
-embed_file = st.file_uploader("Upload embeddings.pkl", type="pkl")
-names_file = st.file_uploader("Upload filenames.pkl", type="pkl")
+# Function to download and load pickle file from Google Drive
+@st.cache_resource
+def load_pickle_from_url(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    return pickle.loads(response.content)
 
-if embed_file is not None and names_file is not None:
-    feature_list = np.array(pickle.load(embed_file))
-    filenames = pickle.load(names_file)
+# Google Drive direct download links
+embed_url = "https://drive.google.com/uc?id=1uPjeV28ViLMP54Aqa2VgB_kaiPXXQeK7"
+names_url = "https://drive.google.com/uc?id=173YdpN3d3vMNq0FjnXLP4TCiAzU_kePE"
 
-    # Proceed with your logic using `feature_list` and `filenames`
-    st.success("Files uploaded and loaded successfully!")
+st.title('👗 Fashion Recommendation System 🧥')
 
-else:
-    st.warning("Please upload both embeddings.pkl and filenames.pkl files.")
+try:
+    feature_list = np.array(load_pickle_from_url(embed_url))
+    filenames = load_pickle_from_url(names_url)
+    st.success("✅ Pickle files loaded successfully!")
+except Exception as e:
+    st.error(f"❌ Error loading pickle files: {e}")
+
 
 # --- Load ResNet50 model ---
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
