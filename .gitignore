@@ -18,7 +18,7 @@ venv/
 
 # Ignore model checkpoints or temp files
 *.h5
-
+*.pkl
 *.log
 
 # VS Code config
