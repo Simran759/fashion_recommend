@@ -10,30 +10,31 @@ import pickle
 from sklearn.neighbors import NearestNeighbors
 from io import BytesIO
 
-import streamlit as st
-import pickle
-import requests
-import numpy as np
 
-# Function to download and load pickle file from Google Drive
+import gdown  # You may need to add this to your requirements.txt
+
+# Google Drive file IDs
+embed_id = "1uPjeV28ViLMP54Aqa2VgB_kaiPXXQeK7"
+name_id = "173YdpN3d3vMNq0FjnXLP4TCiAzU_kePE"
+
 @st.cache_resource
-def load_pickle_from_url(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    return pickle.loads(response.content)
+def download_and_load_pickle(file_id):
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output = f"/tmp/{file_id}.pkl"
+    gdown.download(url, output, quiet=False)
+    with open(output, 'rb') as f:
+        return pickle.load(f)
 
-# Google Drive direct download links
-embed_url = "https://drive.google.com/uc?id=1uPjeV28ViLMP54Aqa2VgB_kaiPXXQeK7"
-names_url = "https://drive.google.com/uc?id=173YdpN3d3vMNq0FjnXLP4TCiAzU_kePE"
-
-st.title('👗 Fashion Recommendation System 🧥')
+# Load files
+st.title("👗 Fashion Recommendation System")
 
 try:
-    feature_list = np.array(load_pickle_from_url(embed_url))
-    filenames = load_pickle_from_url(names_url)
+    feature_list = np.array(download_and_load_pickle(embed_id))
+    filenames = download_and_load_pickle(name_id)
     st.success("✅ Pickle files loaded successfully!")
 except Exception as e:
     st.error(f"❌ Error loading pickle files: {e}")
+
 
 
 # --- Load ResNet50 model ---
