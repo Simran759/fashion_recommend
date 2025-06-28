@@ -15,12 +15,15 @@ from io import BytesIO
 embed_file = st.file_uploader("Upload embeddings.pkl", type="pkl")
 names_file = st.file_uploader("Upload filenames.pkl", type="pkl")
 
-if embed_file and names_file:
+if embed_file is not None and names_file is not None:
     feature_list = np.array(pickle.load(embed_file))
     filenames = pickle.load(names_file)
-    st.success("✅ Files loaded successfully!")
+
+    # Proceed with your logic using `feature_list` and `filenames`
+    st.success("Files uploaded and loaded successfully!")
+
 else:
-    st.warning("⚠️ Please upload both embeddings.pkl and filenames.pkl.")
+    st.warning("Please upload both embeddings.pkl and filenames.pkl files.")
 
 # --- Load ResNet50 model ---
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
