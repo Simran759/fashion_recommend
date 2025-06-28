@@ -10,12 +10,17 @@ import pickle
 from sklearn.neighbors import NearestNeighbors
 from io import BytesIO
 
-# --- Page Title ---
-st.title('Fashion Recommendation System 👗🧥')
+# --- Page Title ---st.title("Fashion Recommendation System 👗🧥")
 
-# --- Load precomputed features and filenames ---
-feature_list = np.array(pickle.load(open('embeddings.pkl', 'rb')))
-filenames = pickle.load(open('filenames.pkl', 'rb'))
+embed_file = st.file_uploader("Upload embeddings.pkl", type="pkl")
+names_file = st.file_uploader("Upload filenames.pkl", type="pkl")
+
+if embed_file and names_file:
+    feature_list = np.array(pickle.load(embed_file))
+    filenames = pickle.load(names_file)
+    st.success("✅ Files loaded successfully!")
+else:
+    st.warning("⚠️ Please upload both embeddings.pkl and filenames.pkl.")
 
 # --- Load ResNet50 model ---
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
