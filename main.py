@@ -59,4 +59,4 @@ if uploaded_file is not None:
     st.subheader("Recommended Products:")
     cols = st.columns(5)
     for i, col in enumerate(cols):
-        col.image(filenames[indices[0][i]], use_column_width=True)
+        col.image(filenames[indices[0][i]], use_container_width=True)
